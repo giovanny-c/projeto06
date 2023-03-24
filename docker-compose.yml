@@ -3,14 +3,14 @@ version: "3.8"
 services:
 
   db_projeto06:
-    container_name: database
+    container_name: database06
     image: postgres
     restart: always
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=docker
-      - POSTRGRES_PASSWORD=1234
+      - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=projeto06_database
     volumes:
       - pgdata:/data/postgresql
@@ -19,6 +19,8 @@ services:
     image: bitnami/redis:latest
     ports:
       - 6379:6379
+    environment:
+      - REDIS_PASSWORD=1234
 
   app:
     build: .
@@ -27,7 +29,7 @@ services:
     ports:
       - 3333:3333
     volumes:
-      - .:usr/app
+      - .:/usr/app
     links:
       - db_projeto06
       - redis

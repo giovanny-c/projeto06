@@ -1,13 +1,13 @@
 import { container } from "tsyringe";
 import "dotenv/config"
 
-import { IStorageProvider } from "./IStorageProvider";
-import { LocalStorageProvider } from "./implemantations/LocalStorageProvider";
-//import { S3StorageProvider } from "./implementations/S3StorageProvider";
+import { IFileSystemProvider } from "./IFileSystemProvider";
+import { FileSystemProvider } from "./implemantations/FileSystemProvider";
+//import { S3FileSystemProvider } from "./implementations/S3FileSystemProvider";
 
 const storage = {
-    local: LocalStorageProvider,
-   // s3: S3StorageProvider
+    local: FileSystemProvider,
+   // s3: S3FileSystemProvider
 }
 
 // const index = process.env.STORAGE as keyof typeof storage ;
@@ -15,7 +15,7 @@ const storage = {
 //   throw new Error(`Invalid storage type: ${index}`);
 // }
 
-container.registerSingleton<IStorageProvider>(
-    "StorageProvider",
+container.registerSingleton<IFileSystemProvider>(
+    "FileSystemProvider",
     storage[process.env.STORAGE as keyof typeof storage]
 )

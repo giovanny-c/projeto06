@@ -5,10 +5,10 @@ import { resolve } from "path";
 import upload from "../../../../../config/upload";
 import { AppError } from "../../../../../errors/AppError";
 
-import { IFilePath, IStorageProvider } from "../IStorageProvider";
+import { IFilePath, IFileSystemProvider } from "../IFileSystemProvider";
 
 
-class LocalStorageProvider implements IStorageProvider {
+class FileSystemProvider implements IFileSystemProvider {
     
     //pega do tmp folde (multer)
     async saveFromTmpFolder({ file, folder }: IFilePath): Promise<string> {
@@ -227,7 +227,10 @@ class LocalStorageProvider implements IStorageProvider {
             throw new AppError("Nao foi possivel ler o arquivo", 500)}
         })
 
-        readStream.on("data", (chunk) => data += chunk)
+        readStream.on("data", (chunk) => {
+            data += chunk
+            console.log("chunk")
+        })
         readStream.on("end", () => console.log("stream ended"))
         
         return data
@@ -261,4 +264,4 @@ class LocalStorageProvider implements IStorageProvider {
 
 }
 
-export { LocalStorageProvider }
+export { FileSystemProvider }
