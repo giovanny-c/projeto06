@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IFileSystemProvider } from "../../../shared/container/providers/storageProvider/IFileSystemProvider";
+import { IFileSystemProvider } from "../../../shared/container/providers/fileSystemProvider/IFileSystemProvider";
 import { resolve } from "path"
 import upload from "../../../config/upload";
 
@@ -26,4 +26,4 @@ class ReadFileStreamUseCase {
 
 }
 
-export { ReadFileStreamUseCase }
+export { ReadFileStreamUseCase}
