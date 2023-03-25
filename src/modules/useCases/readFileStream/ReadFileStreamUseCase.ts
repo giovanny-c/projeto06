@@ -18,10 +18,12 @@ class ReadFileStreamUseCase {
 
     async execute(file: Express.Multer.File){
 
-        this.FileSystemProvider.getFileStream( upload.tmpFolder , file.filename)
 
+       
+        const data = await this.FileSystemProvider.getFileStream( upload.tmpFolder , file.filename)
+        // this.FileSystemProvider.deleteFile(file.destination, file.filename)
 
-
+        return data
     }
 
 }

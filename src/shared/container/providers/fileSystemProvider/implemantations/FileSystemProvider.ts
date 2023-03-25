@@ -213,26 +213,34 @@ class FileSystemProvider implements IFileSystemProvider {
     }
     
 
-    getFileStream(dir: string, file_name: string): string{
+    async getFileStream(dir: string, file_name: string){
         
-        let data = ""
+        let data = []
 
         const file_path = resolve(dir, file_name)
 
         const readStream = fs.createReadStream(file_path, "base64")
         
+
+
         readStream.on("error", (error) => {
             if (error) {
             console.error(error)
             throw new AppError("Nao foi possivel ler o arquivo", 500)}
         })
 
+       
         readStream.on("data", (chunk) => {
-            data += chunk
-            console.log("chunk")
+            data.push(Buffer.from(chunk))
+            
+            
         })
+
         readStream.on("end", () => console.log("stream ended"))
         
+        
+        
+
         return data
     }
           

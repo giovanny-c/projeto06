@@ -9,6 +9,12 @@ const fileRoutes = Router()
 
 const readFileStreamController = new ReadFileStreamController()
 
+
+fileRoutes.get("/", (req, res) => {
+
+    return res.json("WORKING")
+
+})
 fileRoutes.post("/read-file-stream", upload.single("file"), readFileStreamController.handle)
 
 export {fileRoutes}

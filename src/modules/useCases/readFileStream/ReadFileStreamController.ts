@@ -13,9 +13,9 @@ class ReadFileStreamController {
 
         const ReadFile = container.resolve(ReadFileStreamUseCase)
 
-        await ReadFile.execute(file)
+        const data = await ReadFile.execute(file)
 
-        return res.status(200).json("ok")
+        return res.status(200).json({data})
     }
 
 }

@@ -5,7 +5,7 @@ import "dotenv/config"
 
 export const dataSource: DataSource = new DataSource({
     type: "postgres",
-    host: "database",
+    host: "database06", //mesmo nome do container
 
     port: +(process.env.DB_PORT as string),
     username: process.env.DB_USER as string,
