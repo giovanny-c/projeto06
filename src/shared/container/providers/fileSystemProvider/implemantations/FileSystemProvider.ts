@@ -4,6 +4,9 @@ import * as fsPromises from "fs/promises"
 import { resolve } from "path";
 import upload from "../../../../../config/upload";
 import { AppError } from "../../../../../errors/AppError";
+import * as util from "util"
+import {once} from "events"
+import * as stream from "stream"
 
 import { IFilePath, IFileSystemProvider } from "../IFileSystemProvider";
 
@@ -261,6 +264,38 @@ class FileSystemProvider implements IFileSystemProvider {
         }})
         stream.end()
         
+    }
+
+    async writeFileStream(dir, file_name, iterable) {
+        //iterable = oque sera escrito no arquivo
+        
+        // transforma o metodo finished do stream, 
+        //que é baseado em callback, em uma promessa
+        const finished = util.promisify(stream.finished) 
+
+        const file_path = resolve(dir, file_name)
+
+        console.log(iterable.slice(0,5))
+
+        //cria uma stream de escrita dentro desse arquivo do filepath
+        const writable = fs.createWriteStream(file_path)
+
+        for await(const chunk of iterable){//para cada chunck do que será escrito
+            
+            if(!writable.write(chunk)){ // se nao tiver como escrever?
+                //espera a stream emitir o evento "drain"
+                //"once" cria uma promessa que é completada quando o emissor(eventEmitter)
+                //emite determinado evento
+                await once(writable, "drain")
+            }
+
+            
+        }
+
+        writable.end() //fecha a stream
+
+        await finished(writable)//espera até acabar de escrever
+
     }
         
         // async getLastCreatedFile(dir){

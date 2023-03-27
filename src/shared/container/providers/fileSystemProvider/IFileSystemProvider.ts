@@ -14,6 +14,7 @@ interface IFileSystemProvider {
     getFile(dir: string, file_name: string, returnInBase64?: boolean): Promise<Buffer | string | void>
     getFileWithStream(dir: string, file_name: string): Promise<string>
     getFileNamesFromDir(dir: string): Promise<string[] | void>
+    writeFileStream(dir, file_name, iterable): Promise<any>
 }
 
 export { IFileSystemProvider, IFilePath }

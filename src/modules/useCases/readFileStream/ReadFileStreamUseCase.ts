@@ -19,11 +19,14 @@ class ReadFileStreamUseCase {
     async execute(file: Express.Multer.File){
 
         
-       
         const data = await this.FileSystemProvider.getFileWithStream( upload.tmpFolder , file.filename)
         
-        this.FileSystemProvider.deleteFile(file.destination, file.filename)
 
+        await this.FileSystemProvider.writeFileStream(upload.tmpFolder , "umArquivo.pdf", data)
+        
+        this.FileSystemProvider.deleteFile(file.destination, file.filename)
+        
+        
         return data
     }
 
