@@ -9,11 +9,12 @@ class ReadFileStreamController {
 
     async handle(req: Request, res: Response){
 
+        const {new_file_name} = req.body
         const {file} = req
 
         const ReadFile = container.resolve(ReadFileStreamUseCase)
 
-        const data = await ReadFile.execute(file)
+        const data = await ReadFile.execute(file, new_file_name)
 
         return res.status(200).json({data})
     }

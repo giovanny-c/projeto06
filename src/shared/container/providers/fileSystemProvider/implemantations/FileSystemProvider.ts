@@ -216,7 +216,7 @@ class FileSystemProvider implements IFileSystemProvider {
     }
     
 
-    async getFileWithStream(dir: string, file_name: string){
+    async getFileWithStream(dir: string, file_name: string, encoding?: BufferEncoding){
         let data = ""
 
         const file_path = resolve(dir, file_name)
@@ -225,7 +225,7 @@ class FileSystemProvider implements IFileSystemProvider {
             
             await new Promise((resolve) => {
                 
-                fs.createReadStream(file_path, "base64")
+                fs.createReadStream(file_path, encoding || null)
                 .on("error", (error) => {
                     if (error) {
                         console.error(error)
@@ -266,7 +266,7 @@ class FileSystemProvider implements IFileSystemProvider {
         
     }
 
-    async writeFileStream(dir, file_name, iterable) {
+    async writeFileStream(dir, file_name, iterable: Buffer | string | Uint8Array, encoding?: BufferEncoding) {
         //iterable = oque sera escrito no arquivo
         
         // transforma o metodo finished do stream, 
@@ -275,7 +275,7 @@ class FileSystemProvider implements IFileSystemProvider {
 
         const file_path = resolve(dir, file_name)
 
-        console.log(iterable.slice(0,5))
+        
 
         //cria uma stream de escrita dentro desse arquivo do filepath
         const writable = fs.createWriteStream(file_path)
@@ -297,16 +297,28 @@ class FileSystemProvider implements IFileSystemProvider {
         await finished(writable)//espera até acabar de escrever
 
     }
+    
+
+    
+
+    async writeIterableToFile(dir, file_name, iterable: Buffer | string | Uint8Array, encoding?: BufferEncoding) {
         
-        // async getLastCreatedFile(dir){
-            
-    //     const result = fs.readdirSync(dir)
-    //     .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
-    //     .map((file) => ({file, mtime: fs.lstatSync(path.join(dir, file)).mtime}))
-    //     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime())[0]
+        const file_path = resolve(dir, file_name)
+
+        //transforma o pipeline que baseado em callback em promise
+        const pipeline = util.promisify(stream.pipeline)
         
-    //     return result
-    // }
+
+        //le o arquivo/dados que serão escritos
+        const readable = stream.Readable.from(iterable, {encoding: encoding || null})
+
+        //cria a stream de escrita
+        const writable = fs.createWriteStream(file_path)
+
+        //escreve
+        await pipeline(readable, writable)      
+        
+    }   
 
 }
 

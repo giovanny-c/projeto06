@@ -12,9 +12,10 @@ interface IFileSystemProvider {
     deleteFromTmpFolder({ file, folder }: IFilePath): Promise<void>
     deleteFile(dir: string, file_name: string): void
     getFile(dir: string, file_name: string, returnInBase64?: boolean): Promise<Buffer | string | void>
-    getFileWithStream(dir: string, file_name: string): Promise<string>
+    getFileWithStream(dir: string, file_name: string, encoding?: BufferEncoding): Promise<string>
     getFileNamesFromDir(dir: string): Promise<string[] | void>
-    writeFileStream(dir, file_name, iterable): Promise<any>
+    writeFileStream(dir, file_name, iterable, encoding?: BufferEncoding): Promise<void>
+    writeIterableToFile(dir, file_name, iterable: Buffer | string | Uint8Array, encoding?: BufferEncoding):Promise<void>
 }
 
 export { IFileSystemProvider, IFilePath }
