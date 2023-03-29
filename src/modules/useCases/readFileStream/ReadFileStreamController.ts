@@ -19,7 +19,7 @@ class ReadFileStreamController {
 
         const data = await ReadFile.execute(file, new_file_name)
 
-        return res.status(200).json({data})
+        data.pipe(res)
     }
 
 }

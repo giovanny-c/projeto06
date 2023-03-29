@@ -18,21 +18,26 @@ class ReadFileStreamUseCase {
 
     async execute(file: Express.Multer.File, new_file_name: string ){
 
+
+
         const destination = resolve(upload.tmpFolder, new_file_name)
         const source = file.path
         
+        //le o arquivo como stream e retorna
         const data = await this.FileSystemProvider.getFileWithStream( upload.tmpFolder , file.filename) 
-        // this.FileSystemProvider.saveFileStream(upload.tmpFolder, "aFile.jpg", data)
-        // //por que o arquivo nao abre, apos fazer uma stream dele
-        // await this.FileSystemProvider.writeFileStream(upload.tmpFolder , "new_file_name.jpg", data)
-
-        let dat = fs.readFileSync(file.path)
-        await this.FileSystemProvider.writeIterableToFile(upload.tmpFolder , new_file_name, dat)
-        //this.FileSystemProvider.deleteFile(file.destination, file.filename)
         
-
+            
+        //copiam o data(iterable), mas nao da pra abrir, da como corrompido
+        //await this.FileSystemProvider.writeFileStream(upload.tmpFolder , new_file_name, data)
+        //await this.FileSystemProvider.writeIterableToFile(upload.tmpFolder , new_file_name, data.toString(), "binary")
+        
+        //copia do path, da pra abrir
         // this.FileSystemProvider.copyFile(destination, source)
         
+        //deleta
+        //this.FileSystemProvider.deleteFile(file.destination, file.filename)
+    
+        return fs.createReadStream(file.path)
     }
 
 }

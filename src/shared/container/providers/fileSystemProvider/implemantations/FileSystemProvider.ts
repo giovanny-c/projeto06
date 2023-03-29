@@ -217,7 +217,8 @@ class FileSystemProvider implements IFileSystemProvider {
     
 
     async getFileWithStream(dir: string, file_name: string, encoding?: BufferEncoding){
-        let data = ""
+        
+        let data
 
         const file_path = resolve(dir, file_name)
 
@@ -232,8 +233,8 @@ class FileSystemProvider implements IFileSystemProvider {
                     }
                 })
                 .on("data", (chunk) => {
-                    data += chunk
                     
+                    data += chunk
                    
                 })
                 .on("end", resolve)
@@ -245,6 +246,7 @@ class FileSystemProvider implements IFileSystemProvider {
             throw new AppError("Não foi possível ler o arquivo")
         }
 
+        
 
         return data
 
@@ -309,7 +311,7 @@ class FileSystemProvider implements IFileSystemProvider {
         
 
         //le o arquivo/dados que serão escritos
-        let readable = stream.Readable.from(iterable, {encoding: encoding || null})
+        let readable = stream.Readable.from(iterable, {encoding: encoding || null })
         
         //cria a stream de escrita
         const writable = fs.createWriteStream(file_path)
