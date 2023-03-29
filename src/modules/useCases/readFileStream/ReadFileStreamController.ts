@@ -12,6 +12,9 @@ class ReadFileStreamController {
         const {new_file_name} = req.body
         const {file} = req
 
+        // const {range} = req.headers
+        // console.log(range)
+
         const ReadFile = container.resolve(ReadFileStreamUseCase)
 
         const data = await ReadFile.execute(file, new_file_name)

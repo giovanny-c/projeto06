@@ -297,12 +297,11 @@ class FileSystemProvider implements IFileSystemProvider {
         await finished(writable)//espera até acabar de escrever
 
     }
-    
-
-    
-
+     
+//pega um iteravel e poe num file
     async writeIterableToFile(dir, file_name, iterable: Buffer | string | Uint8Array, encoding?: BufferEncoding) {
         
+
         const file_path = resolve(dir, file_name)
 
         //transforma o pipeline que baseado em callback em promise
@@ -310,8 +309,8 @@ class FileSystemProvider implements IFileSystemProvider {
         
 
         //le o arquivo/dados que serão escritos
-        const readable = stream.Readable.from(iterable, {encoding: encoding || null})
-
+        let readable = stream.Readable.from(iterable, {encoding: encoding || null})
+        
         //cria a stream de escrita
         const writable = fs.createWriteStream(file_path)
 
@@ -320,6 +319,30 @@ class FileSystemProvider implements IFileSystemProvider {
         
     }   
 
+    //copia um arquivo para outro
+    copyFile( source: string, destination: string) {
+        
+        let readable = fs.createReadStream(source)
+        
+        let writable = fs.createWriteStream(destination)
+        
+        readable.on("error", (err) => {
+            readable.destroy()
+            console.error(err)
+        })
+
+        writable.on("error", (err) => {
+            writable.destroy()
+            console.error(err)
+        })
+        
+        writable.on('close', ()=>{
+            
+        })
+
+        readable.pipe(writable)
+
+    }
 }
 
 export { FileSystemProvider }

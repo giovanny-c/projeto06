@@ -16,6 +16,7 @@ interface IFileSystemProvider {
     getFileNamesFromDir(dir: string): Promise<string[] | void>
     writeFileStream(dir, file_name, iterable, encoding?: BufferEncoding): Promise<void>
     writeIterableToFile(dir, file_name, iterable: Buffer | string | Uint8Array, encoding?: BufferEncoding):Promise<void>
-}
+    copyFile(source: string, destination: string )
+}   
 
 export { IFileSystemProvider, IFilePath }
