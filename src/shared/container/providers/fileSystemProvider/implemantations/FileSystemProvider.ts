@@ -9,6 +9,7 @@ import {once} from "events"
 import * as stream from "stream"
 
 import { IFilePath, IFileSystemProvider } from "../IFileSystemProvider";
+import { ReadStream } from "typeorm/platform/PlatformTools";
 
 
 class FileSystemProvider implements IFileSystemProvider {
@@ -235,7 +236,7 @@ class FileSystemProvider implements IFileSystemProvider {
                 .on("data", (chunk) => {
                     
                     data += chunk
-                   
+                    
                 })
                 .on("end", resolve)
             
@@ -288,6 +289,7 @@ class FileSystemProvider implements IFileSystemProvider {
                 //espera a stream emitir o evento "drain"
                 //"once" cria uma promessa que é completada quando o emissor(eventEmitter)
                 //emite determinado evento
+                //drain = esta esperando por chuncks para gravar
                 await once(writable, "drain")
             }
 
@@ -338,12 +340,38 @@ class FileSystemProvider implements IFileSystemProvider {
             console.error(err)
         })
         
-        writable.on('close', ()=>{
+        // writable.on('close', ()=>{
             
-        })
+        // })
 
         readable.pipe(writable)
 
+    }
+
+    readWriteTest(readable: Buffer, dest: string){
+
+        
+
+        const readStream = new stream.Transform({
+            
+            transform(chunk){
+                chunk.toString().replace("undefined", "")
+                
+                this.push(chunk)
+
+            },
+            
+        })
+
+        
+
+        const writeStream = fs.createWriteStream(dest)
+
+            readStream.pipe(writeStream)
+
+        
+
+        
     }
 }
 

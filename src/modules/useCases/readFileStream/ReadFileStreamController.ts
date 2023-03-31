@@ -19,7 +19,10 @@ class ReadFileStreamController {
 
         const data = await ReadFile.execute(file, new_file_name)
 
-        data.pipe(res)
+        //escreve a stream no res que é uma writable stream
+        //data.pipe(res)
+    
+        return res.send("ok")
     }
 
 }

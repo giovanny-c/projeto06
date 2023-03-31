@@ -26,6 +26,7 @@ class ReadFileStreamUseCase {
         //le o arquivo como stream e retorna
         const data = await this.FileSystemProvider.getFileWithStream( upload.tmpFolder , file.filename) 
         
+      console.log(file.stream)
             
         //copiam o data(iterable), mas nao da pra abrir, da como corrompido
         //await this.FileSystemProvider.writeFileStream(upload.tmpFolder , new_file_name, data)
@@ -36,7 +37,9 @@ class ReadFileStreamUseCase {
         
         //deleta
         //this.FileSystemProvider.deleteFile(file.destination, file.filename)
-    
+        
+        this.FileSystemProvider.readWriteTest(data as Buffer, destination)
+
         return fs.createReadStream(file.path)
     }
 
